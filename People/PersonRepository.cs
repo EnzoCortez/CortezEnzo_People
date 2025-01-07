@@ -31,7 +31,7 @@ public class PersonRepository
         try
         {
             // TODO: Call Init()
-            Init();
+             Init();
 
             // basic validation to ensure a name was entered
             if (string.IsNullOrEmpty(name))
@@ -39,7 +39,8 @@ public class PersonRepository
 
             // TODO: Insert the new person into the database
             result = conn.Insert(new Person { Name = name });
-            
+            result = 0;
+
 
             StatusMessage = string.Format("{0} record(s) added (Name: {1})", result, name);
         }
