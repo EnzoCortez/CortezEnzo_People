@@ -5,11 +5,17 @@ namespace People;
 
 public class PersonRepository
 {
-    string _dbPath;
+    // Campo privado
+    private string _dbPath;
+
+    // Propiedad pública para acceder al _dbPath
+    public string DbPath
+    {
+        get { return _dbPath; }
+    }
 
     public string StatusMessage { get; set; }
     private SQLiteConnection conn;
-
 
     private void Init()
     {
@@ -17,43 +23,38 @@ public class PersonRepository
             return;
 
         conn = new SQLiteConnection(_dbPath);
-        conn.CreateTable<Person>();// TODO: Add code to initialize the repository         
+        conn.CreateTable<Person>(); // Inicialización del repositorio
     }
 
     public PersonRepository(string dbPath)
     {
-        _dbPath = dbPath;                        
+        _dbPath = dbPath;
     }
 
     public void AddNewPerson(string name)
-    {            
+    {
         int result = 0;
         try
         {
-            // TODO: Call Init()
-             Init();
+            Init();
 
-            // basic validation to ensure a name was entered
+            // Validar que el nombre no esté vacío
             if (string.IsNullOrEmpty(name))
                 throw new Exception("Valid name required");
 
-            // TODO: Insert the new person into the database
+            // Insertar la nueva persona en la base de datos
             result = conn.Insert(new Person { Name = name });
-            result = 0;
 
-
-            StatusMessage = string.Format("{0} record(s) added (Name: {1})", result, name);
+            StatusMessage = string.Format("{0} Registro añadido (Nombre: {1})", result, name);
         }
         catch (Exception ex)
         {
-            StatusMessage = string.Format("Failed to add {0}. Error: {1}", name, ex.Message);
+            StatusMessage = string.Format("Error al agregar {0}. Error: {1}", name, ex.Message);
         }
-
     }
 
     public List<Person> GetAllPeople()
     {
-        // TODO: Init then retrieve a list of Person objects from the database into a list
         try
         {
             Init();
@@ -61,10 +62,18 @@ public class PersonRepository
         }
         catch (Exception ex)
         {
-            StatusMessage = string.Format("Failed to retrieve data. {0}", ex.Message);
+            StatusMessage = string.Format("Error al regresar los datos. {0}", ex.Message);
         }
 
         return new List<Person>();
-
     }
+
+    public void DeletePerson(int id)
+    {
+        using var connection = new SQLiteConnection(DbPath);
+        connection.Delete<Person>(id);
+        StatusMessage = $"Registro con ID {id} eliminado.";
+    }
+
+
 }

@@ -10,38 +10,53 @@ namespace People.ViewModels
         public event PropertyChangedEventHandler PropertyChanged;
 
         public ObservableCollection<Person> People { get; set; } = new ObservableCollection<Person>();
-
         public ICommand AddPersonCommand { get; }
         public ICommand GetPeopleCommand { get; }
         public ICommand DeletePersonCommand { get; }
 
         private readonly PersonRepository _personRepository;
 
-        public string StatusMessage { get; set; }
-
         public MainPageViewModel(string dbPath)
         {
             _personRepository = new PersonRepository(dbPath);
 
-            AddPersonCommand = new Command<string>(OnAddPerson);
+            AddPersonCommand = new Command(OnAddPerson);
             GetPeopleCommand = new Command(OnGetPeople);
             DeletePersonCommand = new Command<Person>(OnDeletePerson);
 
             OnGetPeople(); // Load initial data
         }
 
-        private void OnAddPerson(string name)
+        public MainPageViewModel() : this("default_db_path")
         {
-            if (string.IsNullOrEmpty(name))
+        }
+
+        private string _newPersonName;
+        public string NewPersonName
+        {
+            get => _newPersonName;
+            set
             {
-                StatusMessage = "Name cannot be empty.";
+                _newPersonName = value;
+                PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(NewPersonName)));
+            }
+        }
+
+        public string StatusMessage { get; set; }
+
+        private void OnAddPerson()
+        {
+            if (string.IsNullOrEmpty(NewPersonName))
+            {
+                StatusMessage = "El nombre no puede estar vacío.";
+                PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(StatusMessage)));
                 return;
             }
 
-            _personRepository.AddNewPerson(name);
+            _personRepository.AddNewPerson(NewPersonName);
             StatusMessage = _personRepository.StatusMessage;
-
             OnGetPeople();
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(StatusMessage)));
         }
 
         private void OnGetPeople()
@@ -54,14 +69,20 @@ namespace People.ViewModels
             }
         }
 
-        private void OnDeletePerson(Person person)
+        private async void OnDeletePerson(Person person)
         {
             if (person != null)
             {
+                // Eliminar de la base de datos
+                _personRepository.DeletePerson(person.Id);
+
+                // Eliminar del ObservableCollection
                 People.Remove(person);
-                App.Current.MainPage.DisplayAlert("Alerta", $"{person.Name} acaba de eliminar un registro.", "OK");
+
+                // Mostrar alerta
+                await App.Current.MainPage.DisplayAlert("Alerta", "Enzo Cortez eliminó un registro.", "OK");
             }
         }
-    }
 
+    }
 }
