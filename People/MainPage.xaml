@@ -11,48 +11,105 @@
         <vm:MainPageViewModel />
     </ContentPage.BindingContext>
 
-    <Grid Padding="5" RowSpacing="5" ColumnSpacing="5"
+    <Grid Padding="15" RowSpacing="15" ColumnSpacing="15"
           RowDefinitions="Auto,Auto,Auto,*">
+
+        <!-- Tarjeta personalizada en el encabezado -->
+        <StackLayout Grid.Row="0" Padding="20" Spacing="10">
+            <Frame CornerRadius="10" Padding="15" BackgroundColor="#4A90E2" HasShadow="True">
+                <Grid ColumnDefinitions="Auto, *, Auto">
+                    <!-- Imagen -->
+                    <Image Source="perfil.jpg"
+                           WidthRequest="50"
+                           HeightRequest="50"
+                           Aspect="AspectFill"
+                           VerticalOptions="Center"
+                           HorizontalOptions="Center"
+                           Margin="0,0,10,0"
+                           Grid.Column="0" />
+
+                    <!-- Texto (Nombre y detalle) -->
+                    <StackLayout Grid.Column="1" VerticalOptions="Center">
+                        <Label Text="Enzo Cortez" 
+                               FontSize="18" 
+                               FontAttributes="Bold" 
+                               TextColor="White" />
+                        <Label Text="Rol: Desarrollador" 
+                               FontSize="14" 
+                               TextColor="White" />
+                        <Label Text="Edad: 23 años" 
+                               FontSize="14" 
+                               TextColor="White" />
+                    </StackLayout>
+
+                    <!-- Flecha -->
+                    <Image Source="flecha_derecha.png"
+                           WidthRequest="20"
+                           HeightRequest="20"
+                           VerticalOptions="Center"
+                           HorizontalOptions="End"
+                           Grid.Column="2" />
+                </Grid>
+            </Frame>
+        </StackLayout>
 
         <!-- Entrada para el nombre -->
         <Entry Text="{Binding NewPersonName}" 
                Placeholder="Ingresa un nombre" 
-               Grid.Row="0" />
+               Grid.Row="1"
+          
+               BackgroundColor="#f9f9f9"
+               
+               FontSize="16" />
 
         <!-- Botón para añadir una persona -->
         <Button Text="Agregar persona" 
                 Command="{Binding AddPersonCommand}" 
-                Grid.Row="1" />
+                Grid.Row="2" 
+                BackgroundColor="#4A90E2"
+                TextColor="White"
+                Padding="15"
+                CornerRadius="8"
+                FontSize="16"/>
 
         <!-- Mensaje de estado -->
         <Label Text="{Binding StatusMessage}" 
                TextColor="{StaticResource Primary}" 
-               Grid.Row="2" />
+               Grid.Row="3"
+               HorizontalOptions="Center"
+               FontSize="14"
+               Padding="5"/>
 
-
-
+        <!-- Lista de personas -->
         <CollectionView x:Name="peopleList" ItemsSource="{Binding People}" Grid.Row="4">
             <CollectionView.ItemTemplate>
                 <DataTemplate x:DataType="model:Person">
-                    <Grid ColumnDefinitions="*,Auto">
-                        <!-- Texto del registro -->
-                        <Label Text="{Binding Name}" 
-                       VerticalOptions="Center" 
-                       TextColor="{StaticResource Primary}" />
+                    <Frame Padding="10" Margin="0,5" CornerRadius="10" BackgroundColor="#f4f4f4" HasShadow="True">
+                        <Grid ColumnDefinitions="*,Auto">
+                            <!-- Nombre -->
+                            <Label Text="{Binding Name}" 
+                                   VerticalOptions="Center" 
+                                   TextColor="{StaticResource Primary}" 
+                                   FontSize="16"
+                                   Padding="10,0"
+                                   HorizontalOptions="Start"/>
 
-                        <!-- Botón de borrado -->
-                        <Button Text="Borrar" 
-                        Command="{Binding Path=BindingContext.DeletePersonCommand, Source={x:Reference peopleList}}" 
-                        CommandParameter="{Binding .}" 
-                        BackgroundColor="Red" 
-                        TextColor="White" 
-                        Margin="5,0,0,0"
-                        Grid.Column="1" />
-                    </Grid>
+                            <!-- Botón de borrado -->
+                            <Button Text="Borrar" 
+                                    Command="{Binding Path=BindingContext.DeletePersonCommand, Source={x:Reference peopleList}}" 
+                                    CommandParameter="{Binding .}" 
+                                    BackgroundColor="Red" 
+                                    TextColor="White" 
+                                    Margin="5,0,0,0"
+                                    Grid.Column="1" 
+                                    Padding="10"
+                                    CornerRadius="8"
+                                    FontSize="14"/>
+                        </Grid>
+                    </Frame>
                 </DataTemplate>
             </CollectionView.ItemTemplate>
         </CollectionView>
-
 
     </Grid>
 </ContentPage>
