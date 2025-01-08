@@ -16,7 +16,7 @@
 
         <!-- Tarjeta personalizada en el encabezado -->
         <StackLayout Grid.Row="0" Padding="20" Spacing="10">
-            <Frame CornerRadius="10" Padding="15" BackgroundColor="#4A90E2" HasShadow="True">
+            <Frame CornerRadius="12" Padding="15" BackgroundColor="#007ACC" HasShadow="True">
                 <Grid ColumnDefinitions="Auto, *, Auto">
                     <!-- Imagen -->
                     <Image Source="perfil.jpg"
@@ -31,14 +31,14 @@
                     <!-- Texto (Nombre y detalle) -->
                     <StackLayout Grid.Column="1" VerticalOptions="Center">
                         <Label Text="Enzo Cortez" 
-                               FontSize="18" 
+                               FontSize="20" 
                                FontAttributes="Bold" 
                                TextColor="White" />
                         <Label Text="Rol: Desarrollador" 
-                               FontSize="14" 
+                               FontSize="16" 
                                TextColor="White" />
                         <Label Text="Edad: 23 años" 
-                               FontSize="14" 
+                               FontSize="16" 
                                TextColor="White" />
                     </StackLayout>
 
@@ -57,16 +57,14 @@
         <Entry Text="{Binding NewPersonName}" 
                Placeholder="Ingresa un nombre" 
                Grid.Row="1"
-          
-               BackgroundColor="#f9f9f9"
-               
+               BackgroundColor="#f4f7fa"
                FontSize="16" />
 
         <!-- Botón para añadir una persona -->
         <Button Text="Agregar persona" 
                 Command="{Binding AddPersonCommand}" 
                 Grid.Row="2" 
-                BackgroundColor="#4A90E2"
+                BackgroundColor="#007ACC"
                 TextColor="White"
                 Padding="15"
                 CornerRadius="8"
@@ -84,12 +82,12 @@
         <CollectionView x:Name="peopleList" ItemsSource="{Binding People}" Grid.Row="4">
             <CollectionView.ItemTemplate>
                 <DataTemplate x:DataType="model:Person">
-                    <Frame Padding="10" Margin="0,5" CornerRadius="10" BackgroundColor="#f4f4f4" HasShadow="True">
+                    <Frame Padding="10" Margin="0,5" CornerRadius="12" BackgroundColor="#f4f4f4" HasShadow="True">
                         <Grid ColumnDefinitions="*,Auto">
                             <!-- Nombre -->
                             <Label Text="{Binding Name}" 
                                    VerticalOptions="Center" 
-                                   TextColor="{StaticResource Primary}" 
+                                   TextColor="#333"
                                    FontSize="16"
                                    Padding="10,0"
                                    HorizontalOptions="Start"/>
